@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { authSignIn } from '../features/applicationSlice'
+import { AppDispatch, RootState } from '../app/store'
 
 
 const SignIn = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const error = useSelector((state) => state.application.error)
+    const error = useSelector((state: RootState) => state.application.error) as string | null;
     
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     
-    const handleSetName = (e) => {
+    const handleSetName = (e: ChangeEvent<HTMLInputElement>) => {
         setLogin(e.target.value)
     }
     
-    const handleSetPass = (e) => {
+    const handleSetPass = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
     
-    const handleSignIn = (e) => {
+    const handleSignIn = (e: FormEvent) => {
         e.preventDefault()
-        dispatch(authSignIn({ login, password }))
+        dispatch(authSignIn({_id: '', login, password }))
     }
 
     if (error) {

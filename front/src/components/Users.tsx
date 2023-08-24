@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from '../features/usersSlice'
+import { AppDispatch, RootState } from '../app/store'
 
 const Users = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
-    const users = useSelector((state) => state.users.users)
+    const users = useSelector((state: RootState) => state.users.users)
 
     useEffect(() => {
         dispatch(fetchUsers())

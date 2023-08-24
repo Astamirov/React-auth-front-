@@ -1,15 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../app/store';
 
+type User = {
+    _id: string;
+    login: string;
+    password: string
+}
 
+type StateTodos = {
+    user: User[];
+    signingUp: boolean;
+    signingIn: boolean;
+    token: string | null;
+    error: string | null | unknown;
+}
 
-const initialState = {
+const initialState: StateTodos = {
+    user: [],
     error: null,
     signingUp: false,
     signingIn: false,
     token: localStorage.getItem('token'),
 }
 
-export const authSignUp = createAsyncThunk(
+export const authSignUp = createAsyncThunk<
+    User,
+    User,
+    {rejectValue: unknown; state: RootState}
+>(
     'auth/signup',
     async ({login, password}, thunkAPI) => {
         try {
@@ -35,7 +53,11 @@ export const authSignUp = createAsyncThunk(
     }
 )
 
-export const authSignIn = createAsyncThunk(
+export const authSignIn = createAsyncThunk<
+    string,
+    User,
+    { rejectValue: unknown; state: RootState }
+    >(
     'auth/signin', 
     async ({login, password}, thunkAPI) => {
         try {
@@ -53,7 +75,7 @@ export const authSignIn = createAsyncThunk(
             }   
 
             localStorage.setItem('token', token.token)
-            return token
+            return token.token
         } catch(e) {
             thunkAPI.rejectWithValue(e)
         }
@@ -90,7 +112,7 @@ const applicationSlice = createSlice({
         .addCase(authSignIn.fulfilled, (state, action) => {
             state.signingIn = false
             state.error = null
-            state.token = action.payload.token
+            state.token = action.payload
         })
     },
 })

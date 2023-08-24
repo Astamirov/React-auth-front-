@@ -1,10 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../app/store';
 
-const initialState = {
+type User = {
+    _id: string;
+    login: string;
+    password: string
+}
+
+type StateUsers = {
+    users: User[];
+}
+
+const initialState: StateUsers = {
     users: [],
 }
 
-export const fetchUsers = createAsyncThunk(
+export const fetchUsers = createAsyncThunk<User[], void, {rejectValue: unknown; state: RootState}>(
     'users/fetch',
     async (_, thunkAPI) => {
         try {
@@ -21,7 +32,7 @@ export const fetchUsers = createAsyncThunk(
             }
             return users;
         } catch (e) {
-            return thunkAPI.rejectedWithValue(e)
+            return thunkAPI.rejectWithValue(e)
         }
     }
 )

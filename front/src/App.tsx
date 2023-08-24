@@ -3,10 +3,11 @@ import SignIn from './components/SignIn'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Users from './components/Users'
 import { useSelector } from 'react-redux'
+import { RootState } from './app/store'
 
 
 function App() {
-  const token = useSelector((state) => state.application.token)
+  const token = useSelector((state: RootState) => state.application.token)
 
   if(!token) {
     return (
